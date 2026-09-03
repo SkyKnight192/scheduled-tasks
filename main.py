@@ -16,23 +16,30 @@ import os
 MY_EMAIL = os.environ.get("MY_EMAIL")
 MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
-today = datetime.now()
-today_tuple = (today.month, today.day)
+now= datetime.datetime.now()
+name_list=[]
+def date_check():
+    data = pandas.read_csv("/Users/tharm/PycharmProjects/PythonProject/birthday-wisher-extrahard-start/birthdays.csv")
+    for x in data.name:
+        name_list.append(x)
+    for actual_name in name_list:
+        row= data[data.name==actual_name]
+        if row.month.values[0]==now.month and row.day.values[0]==now.day:
+            with open(f"letter_templates/{chosen_letter}") as letter:
+                letter_content = letter.read()
+                letter_content = letter_content.replace("[NAME]", f"{actual_name}")
+                connection.sendmail(from_addr=email, to_addrs=email,
+                                    msg=f"Subject: HAPPY BIRTHDAY!\n\n {letter_content}")
+                print("email sent!")
 
-data = pandas.read_csv("birthdays.csv")
-birthdays_dict = {(data_row["month"], data_row["day"])                  : data_row for (index, data_row) in data.iterrows()}
-if today_tuple in birthdays_dict:
-    birthday_person = birthdays_dict[today_tuple]
-    file_path = f"letter_templates/letter_{random.randint(1, 3)}.txt"
-    with open(file_path) as letter_file:
-        contents = letter_file.read()
-        contents = contents.replace("[NAME]", birthday_person["name"])
+letter_list= ["letter_1.txt", "letter_2.txt","letter_3.txt"]
+chosen_letter= random.choice(letter_list)
+# # #setup email connection
+connection= smtplib.SMTP("smtp.gmail.com")
+connection.starttls()
+connection.login(user=email, password=password)
 
-    with smtplib.SMTP("YOUR EMAIL PROVIDER SMTP SERVER ADDRESS") as connection:
-        connection.starttls()
-        connection.login(MY_EMAIL, MY_PASSWORD)
-        connection.sendmail(
-            from_addr=MY_EMAIL,
-            to_addrs=birthday_person["email"],
-            msg=f"Subject:Happy Birthday!\n\n{contents}"
-        )
+
+date_check()
+
+                
