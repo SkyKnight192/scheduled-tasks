@@ -6,7 +6,7 @@
 # See the solution video in the 100 Days of Python Course for explainations.
 
 
-import datetime
+from datetime import datetime
 import pandas
 import random
 import smtplib
@@ -16,7 +16,7 @@ import os
 MY_EMAIL = os.environ.get("MY_EMAIL")
 MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
-now= datetime.datetime.now()
+now= datetime.now()
 name_list=[]
 def date_check():
     data = pandas.read_csv("/Users/tharm/PycharmProjects/PythonProject/birthday-wisher-extrahard-start/birthdays.csv")
@@ -28,7 +28,7 @@ def date_check():
             with open(f"letter_templates/{chosen_letter}") as letter:
                 letter_content = letter.read()
                 letter_content = letter_content.replace("[NAME]", f"{actual_name}")
-                connection.sendmail(from_addr=email, to_addrs=email,
+                connection.sendmail(from_addr=MY_EMAIL, to_addrs=MY_EMAIL,
                                     msg=f"Subject: HAPPY BIRTHDAY!\n\n {letter_content}")
                 print("email sent!")
 
@@ -37,7 +37,7 @@ chosen_letter= random.choice(letter_list)
 # # #setup email connection
 connection= smtplib.SMTP("smtp.gmail.com")
 connection.starttls()
-connection.login(user=email, password=password)
+connection.login(user=MY_EMAIL, password=MY_PASSWORD)
 
 
 date_check()
