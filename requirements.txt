@@ -1,4 +1,4 @@
 pandas
-smtplib
 datetime
 random
+smtplib
