@@ -19,7 +19,7 @@ MY_PASSWORD = os.environ.get("MY_PASSWORD")
 now= datetime.now()
 name_list=[]
 def date_check():
-    data = pandas.read_csv("/Users/tharm/PycharmProjects/PythonProject/birthday-wisher-extrahard-start/birthdays.csv")
+    data = pandas.read_csv("birthdays.csv")
     for x in data.name:
         name_list.append(x)
     for actual_name in name_list:
